@@ -28,11 +28,11 @@ public class Socket implements QuoteSource {
     private final String address;
     private final String auth;
 
-    private WebSocketClient client = new WebSocketClient();
+    private final WebSocketClient client = new WebSocketClient();
     private CountDownLatch openConfirmedLatch;
 
     private Session session;
-    private Map<String, List<QuoteSubscriber>> subscribers = new HashMap<>();
+    private final Map<String, List<QuoteSubscriber>> subscribers = new HashMap<>();
 
     public Socket(String address, String auth) {
         this.address = address;

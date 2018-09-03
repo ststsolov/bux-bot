@@ -1,6 +1,7 @@
-package com.bux.trading;
+package com.bux;
 
 import com.bux.quotes.QuoteSubscriber;
+import com.bux.trading.Trader;
 import com.bux.trading.model.BigMoney;
 import com.bux.trading.model.TradeDirection;
 import org.apache.log4j.LogManager;
@@ -9,8 +10,8 @@ import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 
-public class AutomatedTrader extends Trader implements QuoteSubscriber {
-    private static final Logger LOGGER = LogManager.getLogger(AutomatedTrader.class);
+public class Bot implements QuoteSubscriber {
+    private static final Logger LOGGER = LogManager.getLogger(Bot.class);
 
     private final String productId;
     private final BigMoney amount;
@@ -18,14 +19,15 @@ public class AutomatedTrader extends Trader implements QuoteSubscriber {
     private final BigDecimal entryPrice;
     private final BigDecimal limitPrice;
     private final BigDecimal stopPrice;
+    private final Trader trader;
 
     private BigDecimal lastPrice;
     private String positionId;
     private boolean done = false;
 
-    public AutomatedTrader(String address, String auth, String productId, BigMoney amount, int leverage,
-                           BigDecimal entryPrice, BigDecimal limitPrice, BigDecimal stopPrice) {
-        super(address, auth);
+    public Bot(Trader trader, String productId, BigMoney amount, int leverage,
+               BigDecimal entryPrice, BigDecimal limitPrice, BigDecimal stopPrice) {
+        this.trader = trader;
         this.productId = productId;
         this.amount = amount;
         this.leverage = leverage;
@@ -50,33 +52,33 @@ public class AutomatedTrader extends Trader implements QuoteSubscriber {
         if (target.equals(now)) {
             return true;
         }
-        if (before != null) {
-            if ((before.compareTo(target) < 0 && target.compareTo(now) < 0) ||
-                    (before.compareTo(target) > 0 && target.compareTo(now) > 0)) {
-                return true;
-            }
+        if (before == null) {
+            return false;
         }
-        return false;
+        return (before.compareTo(target) < 0 && target.compareTo(now) < 0) ||
+                (before.compareTo(target) > 0 && target.compareTo(now) > 0);
     }
 
     @Override
     public synchronized void onQuote(String productId, BigDecimal currentPrice, DateTime timestamp) {
+        LOGGER.info("Bot received quote " + currentPrice);
         if (done || !this.productId.equals(productId)) {
             return;
         }
         if (positionId == null && priceMatched(entryPrice, lastPrice, currentPrice)) {
             try {
-                positionId = openPosition(productId, amount, leverage, TradeDirection.BUY);
-                LOGGER.info("Opened position with id " + positionId);
+                positionId = trader.openPosition(productId, amount, leverage, TradeDirection.BUY);
+                LOGGER.info("Bot opened position with id " + positionId);
             } catch (Exception e) {
                 LOGGER.error("Failed to open position, stopping bot...", e);
                 done = true;
             }
-        } else if (positionId != null && priceMatched(limitPrice, lastPrice, currentPrice)
-                || positionId != null && priceMatched(stopPrice, lastPrice, currentPrice)) {
+        } else if (positionId != null
+                && (priceMatched(limitPrice, lastPrice, currentPrice)
+                    || priceMatched(stopPrice, lastPrice, currentPrice))) {
             try {
-                closePosition(positionId);
-                LOGGER.info("Closed position with id " + positionId);
+                trader.closePosition(positionId);
+                LOGGER.info("Bot closed position with id " + positionId);
             } catch (Exception e) {
                 LOGGER.error("Failed to close position...", e);
             }

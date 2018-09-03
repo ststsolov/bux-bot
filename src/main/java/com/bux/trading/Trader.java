@@ -24,7 +24,7 @@ public class Trader {
         this.deletePositionUrl = address + "/portfolio/positions/{positionId}";
     }
 
-    public String openPosition(String productId, BigMoney amount, int leverage, TradeDirection direction) throws Exception {
+    public String openPosition(String productId, BigMoney amount, Integer leverage, TradeDirection direction) throws Exception {
         OpenPosition op = new OpenPosition(productId, amount, leverage, direction, null);
         HttpResponse<Trade> response = Unirest.post(openPositionUrl)
                 .header("Accept", "application/json")
