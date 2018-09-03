@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package io.bux.backend.assignment.model;
+package com.bux.trading.model;
 
 public enum TradeDirection {
     BUY,

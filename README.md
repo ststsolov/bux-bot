@@ -1,1 +1,1 @@
-# bux-bot
+# bux-automatedTrader

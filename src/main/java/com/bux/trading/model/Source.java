@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package io.bux.backend.assignment.model;
+package com.bux.trading.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

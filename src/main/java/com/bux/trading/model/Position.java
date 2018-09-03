@@ -3,11 +3,12 @@
 // (powered by Fernflower decompiler)
 //
 
-package io.bux.backend.assignment.model;
+package com.bux.trading.model;
+
+import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import org.joda.time.DateTime;
 
 public final class Position {
     private final String id;

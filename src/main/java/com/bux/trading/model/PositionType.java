@@ -3,12 +3,12 @@
 // (powered by Fernflower decompiler)
 //
 
-package io.bux.backend.assignment.model;
+package com.bux.trading.model;
 
-public enum TradeType {
-    OPEN,
-    CLOSE;
+public enum PositionType {
+    LONG,
+    SHORT;
 
-    private TradeType() {
+    private PositionType() {
     }
 }
