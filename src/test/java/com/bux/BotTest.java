@@ -30,13 +30,13 @@ public class BotTest extends TestCase {
                 new BigDecimal(10), new BigDecimal(11), new BigDecimal(12));
 
         bot.onQuote(product, new BigDecimal(9), new DateTime());
-        bot.onQuote(product, new BigDecimal(9.3), new DateTime());
-        bot.onQuote(product, new BigDecimal(9.9), new DateTime());
+        bot.onQuote(product, new BigDecimal("9.3"), new DateTime());
+        bot.onQuote(product, new BigDecimal("9.9"), new DateTime());
         verify(trader, never()).openPosition(any(), any(), any(), any());
         bot.onQuote(product, new BigDecimal(10), new DateTime());
         verify(trader).openPosition(eq(product), eq(AMOUNT), eq(LEVERAGE), eq(TradeDirection.BUY));
-        bot.onQuote(product, new BigDecimal(10.5), new DateTime());
-        bot.onQuote(product, new BigDecimal(10.9), new DateTime());
+        bot.onQuote(product, new BigDecimal("10.5"), new DateTime());
+        bot.onQuote(product, new BigDecimal("10.9"), new DateTime());
         verify(trader, never()).closePosition(any());
         bot.onQuote(product, new BigDecimal(11), new DateTime());
         verify(trader).closePosition(eq(uuid));
@@ -50,16 +50,16 @@ public class BotTest extends TestCase {
         Bot bot = new Bot(trader, product, AMOUNT, LEVERAGE,
                 new BigDecimal(10), new BigDecimal(11), new BigDecimal(9));
 
-        bot.onQuote(product, new BigDecimal(11.1), new DateTime());
-        bot.onQuote(product, new BigDecimal(10.8), new DateTime());
-        bot.onQuote(product, new BigDecimal(10.2), new DateTime());
+        bot.onQuote(product, new BigDecimal("11.1"), new DateTime());
+        bot.onQuote(product, new BigDecimal("10.8"), new DateTime());
+        bot.onQuote(product, new BigDecimal("10.2"), new DateTime());
         verify(trader, never()).openPosition(any(), any(), any(), any());
-        bot.onQuote(product, new BigDecimal(9.97), new DateTime());
+        bot.onQuote(product, new BigDecimal("9.97"), new DateTime());
         verify(trader).openPosition(eq(product), eq(AMOUNT), eq(LEVERAGE), eq(TradeDirection.BUY));
-        bot.onQuote(product, new BigDecimal(9.4), new DateTime());
-        bot.onQuote(product, new BigDecimal(9.2), new DateTime());
+        bot.onQuote(product, new BigDecimal("9.4"), new DateTime());
+        bot.onQuote(product, new BigDecimal("9.2"), new DateTime());
         verify(trader, never()).closePosition(any());
-        bot.onQuote(product, new BigDecimal(8.99), new DateTime());
+        bot.onQuote(product, new BigDecimal("8.99"), new DateTime());
         verify(trader).closePosition(eq(uuid));
     }
 }

@@ -9,6 +9,6 @@ public enum TradeDirection {
     BUY,
     SELL;
 
-    private TradeDirection() {
+    TradeDirection() {
     }
 }

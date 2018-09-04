@@ -9,6 +9,6 @@ public enum TradeType {
     OPEN,
     CLOSE;
 
-    private TradeType() {
+    TradeType() {
     }
 }

@@ -9,6 +9,6 @@ public enum PositionType {
     LONG,
     SHORT;
 
-    private PositionType() {
+    PositionType() {
     }
 }
