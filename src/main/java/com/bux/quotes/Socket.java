@@ -29,7 +29,7 @@ public class Socket implements QuoteSource {
     private final String auth;
 
     private final WebSocketClient client = new WebSocketClient();
-    private CountDownLatch openConfirmedLatch;
+    private CountDownLatch openConfirmedLatch = new CountDownLatch(1);
 
     private Session session;
     private final Map<String, List<QuoteSubscriber>> subscribers = new HashMap<>();
@@ -64,7 +64,6 @@ public class Socket implements QuoteSource {
     @Override
     public void start() throws Exception {
         LOGGER.info("Connecting to : " + address);
-        openConfirmedLatch = new CountDownLatch(1);
         client.start();
         URI uri = new URI(address);
         ClientUpgradeRequest request = new ClientUpgradeRequest();
