@@ -86,8 +86,8 @@ public class Socket implements QuoteSource {
     public void onMessage(String msg) {
         LOGGER.trace("Received message: " + msg);
         Event e = parseMessage(msg.getBytes(), Event.class);
-        if (e == null || (openConfirmedLatch.getCount() > 0 && e.getType() != EventType.CONNECTED)) {
-            // ignore unknown messages and pre-confirm messages
+        if (e == null) {
+            // ignore unknown messages
             return;
         }
         switch (e.getType()) {
